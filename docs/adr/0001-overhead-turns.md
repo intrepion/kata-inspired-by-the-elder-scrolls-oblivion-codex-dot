@@ -1,0 +1,2 @@
+# Overhead exploration with tactical turns
+We chose a traversable overhead illustrated world and turn-based encounters over first-person 3D. This trades embodied AAA fidelity for a complete compact RPG with readable telegraphs, mobile controls, accessible dialogue and deterministic domain verification. The map is a world to walk through, not a menu of destinations; clicks follow real paths and encounters interrupt travel.
