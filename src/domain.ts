@@ -24,6 +24,8 @@ export const enemies=[
 ] as const;
 export const maxHp=(s:State)=>60+(s.level-1)*12;
 export const maxMana=(s:State)=>24+(s.level-1)*4;
+export const bladeDamage=(s:State)=>12+s.blade*4+(s.weapon?6:0);
+export const spellDamage=(s:State)=>18+s.spell*5;
 export function fresh():State {return {version:1,area:'valley',x:4,y:11,hp:60,mana:24,coins:18,potions:3,relics:0,xp:0,level:1,talents:0,blade:0,spell:0,weapon:false,armor:false,quest:0,ending:'',discoveries:[],defeated:[],fight:null,dead:false,log:['You arrive beneath a sky that has forgotten morning.']};}
 export function note(s:State,text:string){s.log=[text,...s.log].slice(0,6);}
 export function near(s:State,id:string){const p=sites.find(p=>p.id===id);return !!p&&p.area===s.area&&Math.abs(p.x-s.x)+Math.abs(p.y-s.y)<=1;}
@@ -48,8 +50,8 @@ export function act(s:State,a:string):void {
   if(!['strike','cast','guard','potion'].includes(a))return;
   if(a==='cast'&&s.mana<6){note(s,'Not enough mana. Guard to recover six.');return;}
   if(a==='potion'&&s.potions===0){note(s,'No healing draughts remain.');return;}
-  if(a==='strike')f.hp-=12+s.blade*4+(s.weapon?6:0);
-  if(a==='cast'){f.hp-=18+s.spell*5;s.mana-=6;}
+  if(a==='strike')f.hp-=bladeDamage(s);
+  if(a==='cast'){f.hp-=spellDamage(s);s.mana-=6;}
   if(a==='potion'){s.potions--;s.hp=Math.min(maxHp(s),s.hp+32);}
   if(a==='guard')s.mana=Math.min(maxMana(s),s.mana+6);
   if(f.hp<=0){s.defeated.push(e.id);s.coins+=e.coins;s.relics++;s.fight=null;gain(s,e.xp);note(s,e.name+' falls. Recovered '+e.coins+' coins and a relic.');return;}

@@ -9,7 +9,7 @@ export function landscape(c:CanvasRenderingContext2D,s:State){
  for(let y=0;y<16;y++)for(let x=0;x<24;x++){
  const [cx,cy]=project(s,x,y),size=vault?60:40,n=noise(x,y);
  if(vault){if(walkable('vault',x,y)){c.fillStyle=n>.5?'#26323a':'#2b363d';c.fillRect(cx-size/2+1,cy-size/2+1,size-2,size-2);c.strokeStyle='#3d4647';c.strokeRect(cx-size/2+5,cy-size/2+5,size-10,size-10);}continue;}
- c.fillStyle=n>.6?'#486054':n>.3?'#3e584b':'#354e45';c.fillRect(x*40,y*40,40,40);
+ const palette=s.ending==='bound'?['#607253','#53694b','#485e43']:s.ending==='released'?['#526c71','#486066','#3f545c']:['#486054','#3e584b','#354e45'];c.fillStyle=palette[n>.6?0:n>.3?1:2];c.fillRect(x*40,y*40,40,40);
  for(let j=0;j<6;j++){const a=noise(x+j,y-j);c.strokeStyle='#66836b55';c.beginPath();c.moveTo(x*40+a*39,y*40+j*6);c.lineTo(x*40+a*39+3,y*40+j*6-4);c.stroke();}
  }
  if(!vault){
