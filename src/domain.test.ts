@@ -54,3 +54,9 @@ test('walls block movement and paths do not cross the Mere',()=>{
 test('malformed, impossible and incompatible saves fail safely',()=>{
  for(const raw of ['{','null','{}',JSON.stringify({...fresh(),version:2}),JSON.stringify({...fresh(),hp:999}),JSON.stringify({...fresh(),quest:5}),JSON.stringify({...fresh(),discoveries:['unknown']}),JSON.stringify({...fresh(),potions:-1}),JSON.stringify({...fresh(),x:12,y:10}),JSON.stringify({...fresh(),coins:NaN})])assert.equal(restore(raw),null);
 });
+test('guardian chamber rejects an unattuned traveler without starting combat',()=>{
+ const s=fresh();walk(s,19,4);act(s,'enter');walk(s,4,3);walk(s,10,1);step(s,0,1);assert.equal(s.fight,null);assert.equal(s.y,1);assert.equal(s.quest,0);
+});
+test('equipped armor reduces damage and healing consumes exactly one draught',()=>{
+ const s=fresh();walk(s,7,3);act(s,'cache');walk(s,3,9);act(s,'armor');walk(s,13,6);act(s,'guard');assert.equal(s.hp,58);act(s,'potion');assert.equal(s.potions,2);assert.equal(s.hp,55); // healed to 60, then a five-point reply
+});
