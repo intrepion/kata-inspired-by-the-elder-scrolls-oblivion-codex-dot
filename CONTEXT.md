@@ -10,3 +10,9 @@ A valley tending the last dawn trapped inside a ruined observatory.
 **Release**: Freeing dawn beyond the valley, opening a new age.
 **Relic**: A tradeable recovered object, distinct from protected quest items.
 **Recovery**: Returning a fallen wayfarer to Bellwether with possessions intact and a small coin loss.
+
+**Action journey**: A wayfarer’s embodied journey from Bellwether to the observatory and home with the meridian heart.
+
+**Practice**: Progress earned by using a skill successfully, making that skill more effective.
+
+**Prepared advancement**: Ten skill increases awaiting a night’s sleep at the Copper Eave.

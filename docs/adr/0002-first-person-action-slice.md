@@ -1,0 +1,3 @@
+# A separate first-person action journey
+
+The prior overhead movement and modal turns deliberately departed from Oblivion's embodied action. The fidelity program now makes a continuous first-person journey the default: perspective 3D geometry, mouse aim, camera-relative movement, real-time blade/block/spell combat and use-based growth. Retain the complete original atlas at `?mode=classic`, unchanged under its existing `quiet-meridian-v1` save key; the new journey owns `quiet-meridian-first-person-v1`. This prevents a foundational controller/combat migration from invalidating an existing adventure. The default mode is a bounded valley/ruin quest, not a full open-world recreation.
