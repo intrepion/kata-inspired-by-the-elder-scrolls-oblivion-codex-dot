@@ -48,3 +48,7 @@ One valley, one observatory, three named village services, three optional discov
 See [verification](docs/verification.md), [reviews](docs/reviews.md), and [screenshots](docs/screenshots).
 
 Actual Mac Chrome play is separate from domain simulation. Responsive Chrome checks are not physical phone/tablet tests. Audio activation was checked; speaker quality was not judged. No first-person/AAA fidelity, multiplayer, cloud saving or public hosting is claimed.
+
+## Play online
+
+[Play the hosted game](https://intrepion.github.io/kata-inspired-by-the-elder-scrolls-oblivion-codex-dot/)
