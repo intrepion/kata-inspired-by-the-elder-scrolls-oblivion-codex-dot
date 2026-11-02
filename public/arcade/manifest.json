@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "gameId": "kata-inspired-by-the-elder-scrolls-oblivion-codex-dot",
   "playUrl": "https://intrepion.github.io/kata-inspired-by-the-elder-scrolls-oblivion-codex-dot/",
   "screenshots": [
@@ -12,6 +12,52 @@
         "sourcePath": "docs/screenshots/valley.jpg",
         "deployedBuild": null,
         "captureDate": null
+      }
+    },
+    {
+      "path": "arcade/screenshots/ci-20261102-01.jpg",
+      "sha256": "9967c5c5508c2a6753c3bd53cee10c9e0a005656a407f942ea00270ed686288d",
+      "alt": "The Quiet Meridian gameplay, view 1",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-01.png",
+        "sourceSha256": "441b54d73d3dbd27a27c76c8e89d8c1a6afa839355092cd569b9d2f10aa7fdf2",
+        "captureCommit": "c8b0c7391dc84ca035e3dd977d2bff038a96b5a2",
+        "workflowRunId": "41450208747",
+        "inputHashes": {
+          "index.html": "4d3e93a560c987e72a8488536a9d461d4282310da448c9a58186f22b21fa15e1",
+          "assets/action-mode-CMwTAzCk.js": "db7b1a6d0604b035e05fedd8d028acf690672df3f122ed1c6d719ad599814ab6",
+          "assets/action-mode-DpnbAAEm.css": "4c8079837b731587700c3dcfe56da1529a08a46a9c8e554ac797c266bb6ac093",
+          "assets/index-CHj34UE4.js": "5a809db089e0a452cae1c628dafde2c6e1ee5144051d4b7098806ba22a76f6a8",
+          "assets/legacy-Bnx-d6hG.css": "af0aefd102d1fdb0ce80cae0209d73392d04ff706b84e2ba9f8f87c3876ee95c",
+          "assets/legacy-CFCXqzfw.js": "60bfe6a553c89ba292854bc49b4d7f9e389f05a012f31706003ff868bce42ac7"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "39e110f62dd89ca195f102609978b091b377e21844e51cffe1d3611359a852a4"
+      }
+    },
+    {
+      "path": "arcade/screenshots/ci-20261102-02.jpg",
+      "sha256": "91832c39845f6df47b5aa496e6bd74eaa481c8ec6a56588853bb40d89c3236e5",
+      "alt": "The Quiet Meridian gameplay, view 2",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-02.png",
+        "sourceSha256": "e796ceaafab07bc1d9d411ba65347a5003a5512dcd034254e020bf853b763a32",
+        "captureCommit": "c8b0c7391dc84ca035e3dd977d2bff038a96b5a2",
+        "workflowRunId": "41450208747",
+        "inputHashes": {
+          "index.html": "4d3e93a560c987e72a8488536a9d461d4282310da448c9a58186f22b21fa15e1",
+          "assets/action-mode-CMwTAzCk.js": "db7b1a6d0604b035e05fedd8d028acf690672df3f122ed1c6d719ad599814ab6",
+          "assets/action-mode-DpnbAAEm.css": "4c8079837b731587700c3dcfe56da1529a08a46a9c8e554ac797c266bb6ac093",
+          "assets/index-CHj34UE4.js": "5a809db089e0a452cae1c628dafde2c6e1ee5144051d4b7098806ba22a76f6a8",
+          "assets/legacy-Bnx-d6hG.css": "af0aefd102d1fdb0ce80cae0209d73392d04ff706b84e2ba9f8f87c3876ee95c",
+          "assets/legacy-CFCXqzfw.js": "60bfe6a553c89ba292854bc49b4d7f9e389f05a012f31706003ff868bce42ac7"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "39e110f62dd89ca195f102609978b091b377e21844e51cffe1d3611359a852a4"
       }
     }
   ]
