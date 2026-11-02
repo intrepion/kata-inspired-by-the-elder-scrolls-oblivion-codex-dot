@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "gameId": "kata-inspired-by-the-elder-scrolls-oblivion-codex-dot",
+  "playUrl": "https://intrepion.github.io/kata-inspired-by-the-elder-scrolls-oblivion-codex-dot/",
+  "screenshots": [
+    {
+      "path": "arcade/screenshots/view-01.jpg",
+      "sha256": "b6b1f28260913ef203c4e675abbe2d20407d1fdfc838edbccfd5a9d3db477caf",
+      "alt": "Gameplay capture 1",
+      "provenance": {
+        "kind": "existing_repository_capture",
+        "sourcePath": "docs/screenshots/valley.jpg",
+        "deployedBuild": null,
+        "captureDate": null
+      }
+    }
+  ]
+}

@@ -52,3 +52,7 @@ Actual Mac Chrome play is separate from domain simulation. Responsive Chrome che
 ## Play online
 
 [Play the hosted game](https://intrepion.github.io/kata-inspired-by-the-elder-scrolls-oblivion-codex-dot/)
+
+## Arcade metadata
+
+See [docs/arcade-metadata.md](docs/arcade-metadata.md) for the game-owned manifest and screenshot provenance.
