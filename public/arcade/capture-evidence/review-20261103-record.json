@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "workflowCommit": "b0427552e65937147933894605bf25973b9c4ea4",
+  "sourceCommit": "b0427552e65937147933894605bf25973b9c4ea4",
+  "runId": "41675277679",
+  "url": "http://127.0.0.1:4280/",
+  "inputs": {
+    "index.html": "fa7f84fe76a7763852dd67404f8de1e3661d7c8f055545e3c9d771a6903afd42",
+    "assets/index-HVP4AYLl.js": "9da55c2dc11086d92970cc5bbca8d75595ee2582bda3c282f29250d7d48bc5c6",
+    "assets/action-mode-DpnbAAEm.css": "4c8079837b731587700c3dcfe56da1529a08a46a9c8e554ac797c266bb6ac093",
+    "assets/action-mode-Bae4WmLK.js": "737305092018856e3d3ff349942f4511215370189af5ae81bdab5bd21693d171",
+    "assets/legacy-Bnx-d6hG.css": "af0aefd102d1fdb0ce80cae0209d73392d04ff706b84e2ba9f8f87c3876ee95c",
+    "assets/legacy-CFCXqzfw.js": "60bfe6a553c89ba292854bc49b4d7f9e389f05a012f31706003ff868bce42ac7"
+  },
+  "browser": "153.0.8010.12",
+  "viewport": {
+    "width": 1280,
+    "height": 1000
+  },
+  "screenshots": [
+    "quiet-01.png",
+    "quiet-02.png"
+  ]
+}
