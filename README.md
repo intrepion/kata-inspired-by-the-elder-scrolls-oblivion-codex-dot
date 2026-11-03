@@ -8,7 +8,7 @@ The original atlas and its browser save remain under `?mode=classic`; the action
 
 ## Default action controls
 
-WASD walks continuously relative to the first-person camera; mouse/drag/arrows aim. Shift runs, E jumps, F readies or sheathes the blade, J or left mouse taps/holds a strike, and Alt or right mouse holds a facing block. C casts the spell selected with 1/2; H uses a draught. Space activates the nearby object you face. Tab opens the journal and Escape pauses. Blur pauses and clears held input. [Full controls and separate action-save contract](docs/first-person-fidelity.md) · [completed native acceptance and 30-test/build result](docs/LOCAL_ACCEPTANCE_2026-10-15.md).
+WASD walks continuously relative to the first-person camera; mouse/drag/arrows aim. Shift runs, E jumps, F readies or sheathes the blade, J or left mouse taps/holds a strike, and Alt or right mouse holds a facing block. C casts the spell selected with 1/2; H uses a draught. Space activates the nearby object you face. Tab opens the journal and Escape pauses. Ctrl toggles sneak. The HUD shows HIDDEN or DETECTED; approach an unaware foe from behind for a stronger first blade strike. Sneak grows by moving hidden near living enemies and landing surprise strikes. A bright face plate indicates the enemy’s sight direction. Sight uses walls, facing, distance and skill; lighting, footwear and crime are outside this slice. Blur pauses and clears held input. [Full controls and separate action-save contract](docs/first-person-fidelity.md) · [completed native acceptance and 30-test/build result](docs/LOCAL_ACCEPTANCE_2026-10-15.md).
 
 ## Original atlas (`?mode=classic`)
 

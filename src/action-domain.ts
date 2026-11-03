@@ -20,8 +20,9 @@ export interface Enemy {
     phase: 'patrol' | 'chase' | 'windup' | 'recover';
     timer: number;
     boss: boolean;
+    facing: number;
 }
-export type Skill = 'Blade' | 'Block' | 'Destruction' | 'Restoration' | 'Athletics';
+export type Skill = 'Blade' | 'Block' | 'Destruction' | 'Restoration' | 'Athletics' | 'Sneak';
 export interface ActionState {
     version: 1;
     x: number;
@@ -134,9 +135,9 @@ export const solids: Solid[] = [
 ];
 const gate: Solid = { x: 0, z: -10.6, w: 3.8, d: 0.5, h: 3, color: '#7c715c', kind: 'wall' };
 export const worldSolids = (s: ActionState) => s.gateOpen ? solids : [...solids, gate];
-const skills = (): Record<Skill, number> => ({ Blade: 25, Block: 25, Destruction: 25, Restoration: 25, Athletics: 25 });
-const enemy = (id: string, name: string, x: number, z: number, hp: number, boss = false): Enemy => ({ id, name, x, z, homeX: x, homeZ: z, hp, maxHp: hp, phase: 'patrol', timer: 0, boss });
-export function freshAction(): ActionState { return { version: 1, x: 0, z: 14, y: 0, vy: 0, yaw: 0, pitch: 0, hp: 100, mana: 80, fatigue: 100, level: 1, coins: 18, potions: 3, quest: 0, gateOpen: false, cache: false, weapon: false, ready: true, sneak: false, skills: skills(), practice: { Blade: 0, Block: 0, Destruction: 0, Restoration: 0, Athletics: 0 }, gains: 0, enemies: [enemy('briar', 'Briar marauder', -3, -5, 54), enemy('sentinel', 'Hollow sentinel', 3, -14, 64), enemy('astronomer', 'Hollow Astronomer', 0, -17.5, 125, true)], bolts: [], cooldown: 0, castCooldown: 0, swing: 0, flash: 0, time: 0, spell: 'fire', blocking: false, dead: false, log: ['Speak to Nera at the bell ahead. Space activates what you face.'] }; }
+const skills = (): Record<Skill, number> => ({ Blade: 25, Block: 25, Destruction: 25, Restoration: 25, Athletics: 25, Sneak: 25 });
+const enemy = (id: string, name: string, x: number, z: number, hp: number, boss = false): Enemy => ({ id, name, x, z, homeX: x, homeZ: z, hp, maxHp: hp, phase: 'patrol', timer: 0, boss, facing: 0 });
+export function freshAction(): ActionState { return { version: 1, x: 0, z: 14, y: 0, vy: 0, yaw: 0, pitch: 0, hp: 100, mana: 80, fatigue: 100, level: 1, coins: 18, potions: 3, quest: 0, gateOpen: false, cache: false, weapon: false, ready: true, sneak: false, skills: skills(), practice: { Blade: 0, Block: 0, Destruction: 0, Restoration: 0, Athletics: 0, Sneak: 0 }, gains: 0, enemies: [enemy('briar', 'Briar marauder', -3, -5, 54), enemy('sentinel', 'Hollow sentinel', 3, -14, 64), enemy('astronomer', 'Hollow Astronomer', 0, -17.5, 125, true)], bolts: [], cooldown: 0, castCooldown: 0, swing: 0, flash: 0, time: 0, spell: 'fire', blocking: false, dead: false, log: ['Speak to Nera at the bell ahead. Space activates what you face.'] }; }
 export const maxHealth = (s: ActionState) => 100 + (s.level - 1) * 10;
 export function record(s: ActionState, message: string) { s.log.unshift(message); s.log = s.log.slice(0, 6); }
 export function practice(s: ActionState, skill: Skill, amount = 1) {
@@ -174,6 +175,19 @@ function placeVisible(s: ActionState, p: Place) {
 }
 export function focusPlace(s: ActionState): Place | undefined { return places.map(p => placePosition(s, p)).filter(p => Math.hypot(p.x - s.x, p.z - s.z) < 2.9 && Math.abs(angleDifference(angleTo(s, p.x, p.z), s.yaw)) < 0.48 && Math.abs(s.pitch) < 0.75 && placeVisible(s, p)).sort((a, b) => Math.hypot(a.x - s.x, a.z - s.z) - Math.hypot(b.x - s.x, b.z - s.z))[0]; }
 export function focusEnemy(s: ActionState, range = 24) { return s.enemies.filter(e => e.hp > 0 && Math.hypot(e.x - s.x, e.z - s.z) < range && Math.abs(angleDifference(angleTo(s, e.x, e.z), s.yaw)) < 0.25 && Math.abs(s.pitch) < 0.4 && lineClear(s, s.x, s.z, e.x, e.z)).sort((a, b) => Math.hypot(a.x - s.x, a.z - s.z) - Math.hypot(b.x - s.x, b.z - s.z))[0]; }
+/** Simplified sight: walls, facing, proximity and skill; no light or boot-weight simulation. */
+export function enemyNotices(s: ActionState, e: Enemy): boolean {
+    const distance = Math.hypot(e.x-s.x,e.z-s.z);
+    if(e.hp<=0 || !lineClear(s,e.x,e.z,s.x,s.z))return false;
+    if(!s.sneak || e.phase!=='patrol')return distance<8;
+    if(distance<1.2)return true;
+    const range=Math.max(2.5,4-(s.skills.Sneak-25)*.02);
+    const toward=Math.atan2(s.x-e.x,-(s.z-e.z));
+    return distance<range && Math.abs(angleDifference(toward,e.facing))<Math.PI/3;
+}
+export function hidden(s: ActionState): boolean {
+    return s.sneak && !s.enemies.some(e=>enemyNotices(s,e));
+}
 function woundEnemy(s: ActionState, e: Enemy, damage: number, stagger = false) {
     e.hp = Math.max(0, e.hp - damage);
     if (!e.hp) {
@@ -184,13 +198,17 @@ function woundEnemy(s: ActionState, e: Enemy, damage: number, stagger = false) {
         e.phase = 'recover';
         e.timer = 0.7;
     }
+    if(e.hp>0 && e.phase==='patrol')e.phase='chase';
 }
 export function attack(s: ActionState, power = false) { if (s.dead || !s.ready || s.blocking || s.cooldown > 0)
     return; const cost = power ? 28 : 9, ratio = 0.45 + 0.55 * s.fatigue / 100; s.fatigue = Math.max(0, s.fatigue - cost); s.cooldown = power ? 0.95 : 0.43; s.swing = power ? 0.75 : 0.4; const e = focusEnemy(s, 2.5); if (e) {
-    const damage = Math.round((power ? 34 : 18) * (1 + (s.skills.Blade - 25) * 0.025) * (s.weapon ? 1.2 : 1) * ratio);
+    const surprise = hidden(s) && e.phase === 'patrol';
+    const multiplier = surprise ? (s.skills.Sneak >= 50 ? 6 : 4) : 1;
+    const damage = Math.round((power && !surprise ? 34 : 18) * (1 + (s.skills.Blade - 25) * 0.025) * (s.weapon ? 1.2 : 1) * ratio * multiplier);
     woundEnemy(s, e, damage, power);
     practice(s, 'Blade');
-    record(s, `${power ? 'Power attack' : 'Blade strike'}: ${damage} damage.`);
+    if(surprise)practice(s,'Sneak');
+    record(s, `${surprise ? `Sneak attack ×${multiplier}` : power ? 'Power attack' : 'Blade strike'}: ${damage} damage.`);
 }
 else
     record(s, 'Your blade cuts empty air. Aim and close the distance.'); }
@@ -258,6 +276,7 @@ export function tickAction(s: ActionState, input: Input, seconds: number) {
         move(s, dx, dz);
         if (input.run)
             practice(s, 'Athletics', Math.hypot(s.x - ox, s.z - oz));
+        if(hidden(s) && Math.hypot(s.x-ox,s.z-oz)>0 && s.enemies.some(e=>e.hp>0 && Math.hypot(e.x-s.x,e.z-s.z)<8))practice(s,'Sneak',Math.hypot(s.x-ox,s.z-oz));
         s.mana = Math.min(80, s.mana + 3.8 * dt);
         s.fatigue = Math.min(100, s.fatigue + (input.run && mag ? 3 : 13) * dt);
         if (s.y > 0 || s.vy > 0) {
@@ -285,7 +304,8 @@ export function tickAction(s: ActionState, input: Input, seconds: number) {
                 if (e.timer <= 0)
                     e.phase = 'chase';
             }
-            else if (visible && distance < (s.sneak ? 4 : 8)) {
+            else if (enemyNotices(s,e)) {
+                e.facing=Math.atan2(s.x-e.x,-(s.z-e.z));
                 if (distance < 1.9) {
                     e.phase = 'windup';
                     e.timer = e.boss ? 1 : 0.85;
@@ -302,6 +322,7 @@ export function tickAction(s: ActionState, input: Input, seconds: number) {
             }
             else {
                 e.phase = 'patrol';
+                e.facing=0;
                 const tx = e.homeX + Math.sin(s.time * 0.5) * 0.7, tz = e.homeZ + Math.cos(s.time * 0.5) * 0.5;
                 if (canStand(s, tx, tz, 0.35)) {
                     e.x = tx;
@@ -438,7 +459,7 @@ export function restoreAction(raw: string): ActionState | undefined {
                 return;
             const values = a[key] as Record<string, unknown>;
             for (const skill of Object.keys(s.skills) as Skill[]) {
-                const n = values[skill];
+                const n = skill==='Sneak' && values[skill]===undefined ? (key==='skills'?25:0) : values[skill];
                 if (typeof n !== 'number' || !Number.isFinite(n) || n < 0 || n > 100 || key === 'skills' && (n < 25 || n % 1))
                     return;
                 s[key][skill] = n;

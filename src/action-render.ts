@@ -76,9 +76,11 @@ function scene(s: ActionState): Face[] {
         person(mesh, pos.x, pos.z, p.id === 'nera' ? '#557b7b' : '#a18455');
     }
     for (const e of s.enemies)
-        if (e.hp > 0)
+        if (e.hp > 0) {
             person(mesh, e.x, e.z, e.boss ? '#65566f' : '#805b55', true, e.phase === 'windup', e.boss, s.time);
-        else
+            // A bright face plate makes the simplified sight direction legible.
+            box(mesh, e.x + Math.sin(e.facing) * .23, 1.5 * (e.boss ? 1.17 : 1), e.z - Math.cos(e.facing) * .23, .14, .12, .14, '#e7c178');
+        } else
             box(mesh, e.x, 0.03, e.z, 1.4, 0.18, 0.6, '#5f5354');
     for (const bolt of s.bolts) {
         box(mesh, bolt.x, bolt.y - 0.14, bolt.z, 0.3, 0.3, 0.3, '#e8b4ef');

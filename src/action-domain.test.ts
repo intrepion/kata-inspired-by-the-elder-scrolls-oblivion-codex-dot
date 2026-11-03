@@ -255,3 +255,37 @@ test('a power attack interrupts a windup while a basic strike leaves its timing 
     assert.equal(power.enemies[0].phase, 'recover');
     assert.equal(power.enemies[0].timer, 0.7);
 });
+
+import { enemyNotices, hidden } from './action-domain';
+function stealthScenario() {
+ const s=freshAction();s.x=-3;s.z=-3;s.sneak=true;s.yaw=0;
+ const e=s.enemies[0];e.x=-3;e.z=-5;e.homeX=-3;e.homeZ=-5;e.facing=0;
+ return {s,e};
+}
+test('sneaking respects facing, close proximity and occluding walls',()=>{
+ const {s,e}=stealthScenario();assert.equal(hidden(s),true);assert.equal(enemyNotices(s,e),false);
+ s.z=-7;assert.equal(enemyNotices(s,e),true);s.z=-4;assert.equal(enemyNotices(s,e),true);
+ s.x=0;s.z=-8;e.x=0;e.z=-14;e.facing=Math.PI;assert.equal(enemyNotices(s,e),false);
+});
+test('an unaware blade strike gains a bonus once and never stacks power attack damage',()=>{
+ const normal=stealthScenario(),power=stealthScenario();normal.e.hp=power.e.hp=500;
+ attack(normal.s);attack(power.s,true);assert.equal(normal.e.hp,428);assert.equal(power.e.hp,428);
+ assert.equal(normal.e.phase,'chase');assert.equal(normal.s.practice.Sneak,1);
+ normal.s.cooldown=0;normal.s.fatigue=100;attack(normal.s);assert.equal(normal.e.hp,410);assert.equal(normal.s.practice.Sneak,1);
+});
+test('other observers prevent surprise bonuses and alerted foes still detect crouched players',()=>{
+ const {s,e}=stealthScenario();e.hp=500;const other=s.enemies[1];other.x=-1;other.z=-3;other.phase='chase';
+ assert.equal(hidden(s),false);attack(s);assert.equal(e.hp,482);assert.equal(s.practice.Sneak,0);
+});
+test('Sneak improves through hidden movement near living enemies, not idle crouching or empty fields',()=>{
+ const {s}=stealthScenario();seconds(s,1);assert.equal(s.practice.Sneak,0);
+ tickAction(s,{forward:0,strafe:1},.2);assert.ok(s.practice.Sneak>0);
+ const before=s.practice.Sneak;s.enemies.forEach(e=>e.hp=0);tickAction(s,{forward:0,strafe:1},.2);assert.equal(s.practice.Sneak,before);
+ s.skills.Sneak=99;practice(s,'Sneak',10);assert.equal(s.skills.Sneak,100);assert.equal(s.practice.Sneak,0);
+});
+test('older action saves gain default Sneak values and new saves retain trained skill',()=>{
+ const s=freshAction();const old=JSON.parse(JSON.stringify(s));delete old.skills.Sneak;delete old.practice.Sneak;
+ const loaded=restoreAction(JSON.stringify(old))!;assert.equal(loaded.skills.Sneak,25);assert.equal(loaded.practice.Sneak,0);
+ s.skills.Sneak=40;s.practice.Sneak=1.5;const current=restoreAction(JSON.stringify(s))!;assert.equal(current.skills.Sneak,40);assert.equal(current.practice.Sneak,1.5);
+ for(const n of [-1,101,25.5]){s.skills.Sneak=n;assert.equal(restoreAction(JSON.stringify(s)),undefined);}
+});
