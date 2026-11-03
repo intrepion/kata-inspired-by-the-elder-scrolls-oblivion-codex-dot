@@ -1,5 +1,7 @@
 # First-person fidelity update
 
+[Kata Arcade](https://intrepion.github.io/)
+
 The default journey now uses a continuous first-person 3D camera, aim-dependent blade/block/spell action and use-based skill growth. Follow Nera’s ember quest into the observatory and return its dawn. See [controls, source research and acceptance route](docs/first-person-fidelity.md).
 
 Preview: http://localhost:5199 · [Original atlas mode](http://localhost:5199/?mode=classic)
